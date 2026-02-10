@@ -11,6 +11,15 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.6",
-    "express": "^5.2.1"
-  }
+    "express": "^5.2.1",
+    "json-server": "^1.0.0-beta.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shubha-2018/react-crud-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shubha-2018/react-crud-backend/issues"
+  },
+  "homepage": "https://github.com/shubha-2018/react-crud-backend#readme"
 }
