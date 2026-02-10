@@ -2,76 +2,41 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-
-// Render / Production साठी PORT dynamic हवा
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-// ✅ Production + Local React दोन्ही allow
-app.use(
-  cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "https://react-crud-app-blond-alpha.vercel.app"   // 👈 तुमचा Vercel URL
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+// 🔓 Allow ALL origins (safe for test)
+app.use(cors());
 
-// ⚠️ In-memory DB (Render restart झाला की clear होईल)
+// In-memory DB
 let users = [];
 
-// ---------- ROUTES ----------
-
-// Health check
+// Routes
 app.get("/", (req, res) => {
-  res.send("Backend is running on Render 🚀");
+  res.send("Backend running on Render");
 });
 
-// GET all users
 app.get("/users", (req, res) => {
   res.json(users);
 });
 
-// CREATE user
 app.post("/users", (req, res) => {
-  try {
-    const newUser = {
-      id: Date.now().toString(),
-      ...req.body,
-    };
-
-    users.push(newUser);
-    res.status(201).json(newUser);
-  } catch (err) {
-    res.status(500).json({ error: "User create failed" });
-  }
+  const newUser = { id: Date.now().toString(), ...req.body };
+  users.push(newUser);
+  res.status(201).json(newUser);
 });
 
-// UPDATE user
 app.put("/users/:id", (req, res) => {
-  const { id } = req.params;
-
-  users = users.map((u) =>
-    u.id === id ? { ...u, ...req.body } : u
-  );
-
-  res.json({ message: "User updated successfully" });
+  users = users.map(u => u.id === req.params.id ? { ...u, ...req.body } : u);
+  res.json({ message: "Updated" });
 });
 
-// DELETE user
 app.delete("/users/:id", (req, res) => {
-  const { id } = req.params;
-
-  users = users.filter((u) => u.id !== id);
-
-  res.json({ message: "User deleted successfully" });
+  users = users.filter(u => u.id !== req.params.id);
+  res.json({ message: "Deleted" });
 });
 
-// Start server
 app.listen(PORT, () => {
-  console.log(`Backend running on port ${PORT}`);
+  console.log("Backend running on", PORT);
 });
