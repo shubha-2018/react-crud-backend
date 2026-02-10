@@ -5,16 +5,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
+app.use(cors({ origin: "*" }));
 
-// 🔓 Allow ALL origins (safe for test)
-app.use(cors());
-
-// In-memory DB
 let users = [];
 
-// Routes
 app.get("/", (req, res) => {
-  res.send("Backend running on Render");
+  res.send("Backend running");
 });
 
 app.get("/users", (req, res) => {
@@ -24,7 +20,7 @@ app.get("/users", (req, res) => {
 app.post("/users", (req, res) => {
   const newUser = { id: Date.now().toString(), ...req.body };
   users.push(newUser);
-  res.status(201).json(newUser);
+  res.json(newUser);
 });
 
 app.put("/users/:id", (req, res) => {
@@ -38,5 +34,5 @@ app.delete("/users/:id", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log("Backend running on", PORT);
+  console.log("Server running on", PORT);
 });
